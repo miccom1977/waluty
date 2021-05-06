@@ -10,7 +10,11 @@
 
 <div class="example-wrapper">
     <h1>Strona główna</h1>
-
+     {% if app.user %}
+            <div>
+                Zalogowano jako {{ app.user.username }}, <a href="{{ path('logout') }}">Wyloguj</a>
+            </div>
+    {% endif %}   
     {% for valute  in infoToday['0']['rates'] %}
         <li>{{ valute.currency }}: code={{ valute.code }}, kupno: {{ valute.bid }}, sprzedaż: {{ valute.ask }}</li>
     {% endfor %}
