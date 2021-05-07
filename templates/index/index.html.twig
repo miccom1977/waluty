@@ -3,6 +3,11 @@
 {% block title %}Kursy Walut{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('info') %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -11,12 +16,16 @@
 <div class="example-wrapper">
     <h1>Strona główna</h1>
      {% if app.user %}
-            <div>
-                Zalogowano jako {{ app.user.username }}, <a href="{{ path('logout') }}">Wyloguj</a>
-            </div>
-    {% endif %}   
-    {% for valute  in infoToday['0']['rates'] %}
+        <div>
+            Zalogowano jako {{ app.user.username }}, <a href="{{ path('logout') }}">Wyloguj</a>
+            {% for valute  in infoToday['0']['rates'] %}
         <li>{{ valute.currency }}: code={{ valute.code }}, kupno: {{ valute.bid }}, sprzedaż: {{ valute.ask }}</li>
     {% endfor %}
+        </div>
+    {% else %}
+        <a href="{{ path('login') }}">Zaloguj się</a><br>
+        <a href="{{ path('app_register') }}">Zarejestruj się</a><br>
+
+    {% endif %}
 </div>
 {% endblock %}
