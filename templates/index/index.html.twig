@@ -18,9 +18,9 @@
      {% if app.user %}
         <div>
             Zalogowano jako {{ app.user.username }}, <a href="{{ path('logout') }}">Wyloguj</a>
-            {% for valute  in infoToday['0']['rates'] %}
-        <li>{{ valute.currency }}: code={{ valute.code }}, kupno: {{ valute.bid }}, sprzedaż: {{ valute.ask }}</li>
-    {% endfor %}
+            {{ dump(infoToday['0']['rates']) }}
+            
+            
         </div>
     {% else %}
         <a href="{{ path('login') }}">Zaloguj się</a><br>
