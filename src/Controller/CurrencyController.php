@@ -31,7 +31,21 @@ class CurrencyController extends AbstractController
             $entityManager->persist($singleCurrency);
             $entityManager->flush();
             echo $value['currency'].' zaktualizowano<br>';
+<<<<<<< HEAD
         }
         exit();
+=======
+            //print_r($data['0']['rates']);
+        }
+        
+       //var_dump($data['0']['rates']);
+        //echo '</pre>';
+        exit();
+        /*
+        return $this->render('currency_data/index.html.twig', [
+            'controller_name' => 'CurrencyController',
+        ]);
+        */
+>>>>>>> ab1f31352488eed46775edfd292e809175e88b9c
     }
 }
