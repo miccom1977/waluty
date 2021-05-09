@@ -1,6 +1,6 @@
 # waluty
 
-Ćwiczebny kod wymiany walut
+Ćwiczebny kod śledzenia walut
 
 Route /destroyMailing/{code} służy do usuwania danych usera dotyczących śledzenia walut
 
