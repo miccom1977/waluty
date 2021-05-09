@@ -63,7 +63,7 @@ class RegistrationController extends AbstractController
                         //echo 'user jest matur;), ma '.$userYears.' lata';
                         // zapisujemy do bazy birthday jako timpestamp
                         $user->setBirthday($birthDateTimestamp);
-                        $user->setMailingActivate(0);
+                        $user->setMailingActivate(md5(time()));
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($user);
                         $entityManager->flush();

@@ -41,7 +41,7 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
     private $mailingActivate;
 
@@ -154,12 +154,12 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getMailingActivate(): ?int
+    public function getMailingActivate(): ?string
     {
         return $this->mailingActivate;
     }
 
-    public function setMailingActivate(int $mailingActivate)
+    public function setMailingActivate(string $mailingActivate)
     {
         $this->mailingActivate = $mailingActivate;
 

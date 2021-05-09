@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Currency;
 use App\Entity\User;
+use App\Entity\UserCurrency;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -66,6 +67,8 @@ class CurrencyController extends AbstractController
                     $info .= 'Waluta '. $singleResult['currency_name'] .' zdrożała!<br>';
                 }
             }
+
+            $info .= 'Jeżeli chcesz zakończyć śledzenie kliknij w link <a href="/destroyMailing/'.$singleUsers->getMailingActivate().'"> tutaj</a>';
             echo 'Wysłam email do usera '.$singleUsers->getEmail().' z treścią:'.$info;
 
             $email = (new Email())
@@ -80,10 +83,25 @@ class CurrencyController extends AbstractController
     }
 
 
+    /**
+     * @Route("/destroyMailing/{code}", name="destroyMailing")
+     */
+    public function destroyMailing($code): Response
+    {
+        // usuwamy wszystkei dane które user ustawił podczas rejestracji
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneBy([
+            'mailingActivate' => $code
+        ]);  
 
-
-
-
+        $qb = $em->createQueryBuilder();
+        $qb->delete('App\Entity\UserCurrency', 'u');
+        $qb->where('u.user_id = :user_id');
+        $qb->setParameter('user_id', $user->getId());
+        $qb->getQuery()->execute();
+        echo 'Twoje dane usunięto';
+        exit();
+    }
 
 
 }
