@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Currency;
+use App\Entity\UserCurrency;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -32,8 +34,10 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        
+
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -59,21 +63,39 @@ class RegistrationController extends AbstractController
                         //echo 'user jest matur;), ma '.$userYears.' lata';
                         // zapisujemy do bazy birthday jako timpestamp
                         $user->setBirthday($birthDateTimestamp);
+                        $user->setMailingActivate(0);
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($user);
                         $entityManager->flush();
+                        // dodajemy zaznaczone waluty do śledzenia
+                        $currency = $this->getDoctrine()->getRepository(Currency::class);
+                        $currencyData = $currency->findAll();
+                        $currencyInfo = '';
+                        foreach( $currencyData as $sCur ){
+                            if (true === $form->get($sCur->getCurrencyCode())->getData()) {
+                                $userCurrency =  new UserCurrency();
+                                $userCurrency->setCurrencyId($sCur->getId());
+                                $userCurrency->setCurrencyMin( $form->get('min'.$sCur->getCurrencyCode())->getData() );
+                                $userCurrency->setCurrencyMax( $form->get('max'.$sCur->getCurrencyCode())->getData() );
+                                $userCurrency->setUserId( $user->getId() );
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $entityManager->persist($userCurrency);
+                                $entityManager->flush();
+                                $currencyInfo .= 'Zaznaczono walutę '. $sCur->getCurrencyName() .' do śledzenia.<br>';
+                            }
+                        }
 
-                        // generate a signed url and email it to the user
                         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                             (new TemplatedEmail())
-                                ->from(new Address('biuro@web-kod.pl', 'Registration Employe'))
+                                ->from(new Address('biuro@web-kod.pl', 'Pracownik rejestracji'))
                                 ->to($user->getEmail())
-                                ->subject('Please Confirm your Email')
+                                ->subject('Potwierdź rejestrację w systemie Waluty')
                                 ->htmlTemplate('registration/confirmation_email.html.twig')
+                                ->context([
+                                    'currencyInfo' => $currencyInfo
+                                ])
                         );
-                        // do anything else you need here, like send an email
-                        $this->addFlash('info', 'Poprawnie zarejestrowano');
-                        return $this->redirectToRoute('index');
+                        return $this->redirectToRoute('index')->addFlash('info', 'Poprawnie zarejestrowano');
 
                     }else{
                         //echo 'user nie jest pełnoletni, ma tylko '. $userYears .' lat';
@@ -87,7 +109,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registrationForm' => $form->createView()
         ]);
     }
 

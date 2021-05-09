@@ -89,4 +89,5 @@ class Currency
 
         return $this;
     }
+
 }

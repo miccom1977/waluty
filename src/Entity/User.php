@@ -159,7 +159,7 @@ class User implements UserInterface, \Serializable
         return $this->mailingActivate;
     }
 
-    public function setMailingActivate(int $mailingActivate): self
+    public function setMailingActivate(int $mailingActivate)
     {
         $this->mailingActivate = $mailingActivate;
 
