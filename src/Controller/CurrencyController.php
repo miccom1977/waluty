@@ -74,8 +74,8 @@ class CurrencyController extends AbstractController
             $email = (new Email())
             ->from( 'biuro@web-kod.pl' )
             ->to( $singleUsers->getEmail() )
-            ->subject('Ceny walut uległy zmianie!')
-            ->text ($info )
+            ->subject( 'Ceny walut uległy zmianie!' )
+            ->text ( $info )
             ->html( '<p>'.$info.'</p>' );
             $mailer->send( $email );
             exit();

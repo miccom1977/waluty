@@ -47,7 +47,7 @@ class Currency
         return $this->currencyName;
     }
 
-    public function setCurrencyName( string $currencyName ): self
+    public function setCurrencyName(string $currencyName): self
     {
         $this->currencyName = $currencyName;
 
@@ -59,7 +59,7 @@ class Currency
         return $this->currencyCode;
     }
 
-    public function setCurrencyCode( string $currencyCode ): self
+    public function setCurrencyCode(string $currencyCode): self
     {
         $this->currencyCode = $currencyCode;
 
@@ -71,7 +71,7 @@ class Currency
         return $this->currencyBid;
     }
 
-    public function setCurrencyBid( string $currencyBid ): self
+    public function setCurrencyBid(string $currencyBid): self
     {
         $this->currencyBid = $currencyBid;
 
@@ -83,7 +83,7 @@ class Currency
         return $this->currencyAsk;
     }
 
-    public function setCurrencyAsk( string $currencyAsk ): self
+    public function setCurrencyAsk(string $currencyAsk): self
     {
         $this->currencyAsk = $currencyAsk;
 
