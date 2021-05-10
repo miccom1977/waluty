@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kursy Walut{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>InfoSite</h1>
+    {% for message in app.flashes('info') %}
+        <div class="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

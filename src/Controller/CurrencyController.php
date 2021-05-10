@@ -20,6 +20,7 @@ class CurrencyController extends AbstractController
         
         $nbp = file_get_contents('http://api.nbp.pl/api/exchangerates/tables/c/?format=json');
         $data = json_decode($nbp, TRUE);
+        $CurrencyInfo = '';
         foreach( $data['0']['rates'] as $value ) {
             
             $entityManager = $this->getDoctrine()->getManager();
@@ -34,9 +35,10 @@ class CurrencyController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist( $singleCurrency );
             $entityManager->flush();
-            echo $value['currency'] .' zaktualizowano<br>';
+            $CurrencyInfo .= $value['currency'].'<br>';
         }
-        exit();
+        $this->addFlash('info', 'Waluty:<br>'. $CurrencyInfo .' zaktualizowano<br>');
+        return $this->render('index/inside.html.twig');
     }
 
     /**
@@ -69,8 +71,6 @@ class CurrencyController extends AbstractController
             }
 
             $info .= 'Jeżeli chcesz zakończyć śledzenie kliknij w link <a href="/destroyMailing/'. $singleUsers->getMailingActivate() .'"> tutaj</a>';
-            echo 'Wysłam email do usera '. $singleUsers->getEmail() .' z treścią:'.$info;
-
             $email = (new Email())
             ->from( 'biuro@web-kod.pl' )
             ->to( $singleUsers->getEmail() )
@@ -78,8 +78,9 @@ class CurrencyController extends AbstractController
             ->text ( $info )
             ->html( '<p>'.$info.'</p>' );
             $mailer->send( $email );
-            exit();
         }
+        $this->addFlash('info', 'Mailing ze zmianami wykonano');
+        return $this->render('index/inside.html.twig');
     }
 
 
@@ -99,9 +100,7 @@ class CurrencyController extends AbstractController
         $qb->where('u.user_id = :user_id');
         $qb->setParameter('user_id', $user->getId());
         $qb->getQuery()->execute();
-        echo 'Twoje dane usunięto';
-        exit();
+        $this->addFlash('info', 'Twoje dane usunięto');
+        return $this->render('index/inside.html.twig');
     }
-
-
 }

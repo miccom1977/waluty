@@ -34,9 +34,6 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        
-
-
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -104,8 +101,7 @@ class RegistrationController extends AbstractController
                 }else{
                     $this->addFlash('error', 'Podaj poprawny numer telefonu');
                 }
-            }
-            
+            }  
         }
 
         return $this->render('registration/register.html.twig', [
