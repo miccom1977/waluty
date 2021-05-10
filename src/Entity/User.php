@@ -96,7 +96,7 @@ class User implements UserInterface, \Serializable
      */
 
 
-    public function setBirthday( $birthday )
+    public function setBirthday($birthday)
     {
         $this->birthday = $birthday;
 

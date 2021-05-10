@@ -19,13 +19,12 @@
         <div>
             Zalogowano jako {{ app.user.username }}, <a href="{{ path('logout') }}">Wyloguj</a>
             {% for valute  in infoToday['0']['rates'] %}
-        <li>{{ valute.currency }}: code={{ valute.code }}, kupno: {{ valute.bid }}, sprzedaż: {{ valute.ask }}</li>
-    {% endfor %}
+                {{ valute.currency }}: code={{ valute.code }}, kupno: {{ valute.bid }}, sprzedaż: {{ valute.ask }}
+            {% endfor %}
         </div>
     {% else %}
         <a href="{{ path('login') }}">Zaloguj się</a><br>
         <a href="{{ path('app_register') }}">Zarejestruj się</a><br>
-
     {% endif %}
 </div>
 {% endblock %}

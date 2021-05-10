@@ -20,11 +20,11 @@ class CurrencyController extends AbstractController
         
         $nbp = file_get_contents('http://api.nbp.pl/api/exchangerates/tables/c/?format=json');
         $data = json_decode($nbp, TRUE);
-        foreach( $data['0']['rates'] as $value) {
+        foreach( $data['0']['rates'] as $value ) {
             
             $entityManager = $this->getDoctrine()->getManager();
-            $singleCurrency = $entityManager->getRepository(Currency::class)->findOneBy(['currencyName' => $value['currency'] ]);
-            if (!$singleCurrency) {
+            $singleCurrency = $entityManager->getRepository(Currency::class)->findOneBy( ['currencyName' => $value['currency'] ] );
+            if ( !$singleCurrency ) {
                 $singleCurrency = new Currency();
             }
             $singleCurrency->setCurrencyBid( $value['bid'] );
@@ -32,9 +32,9 @@ class CurrencyController extends AbstractController
             $singleCurrency->setCurrencyName( $value['currency'] );
             $singleCurrency->setCurrencyCode( strtolower($value['code']) );
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($singleCurrency);
+            $entityManager->persist( $singleCurrency );
             $entityManager->flush();
-            echo $value['currency'].' zaktualizowano<br>';
+            echo $value['currency'] .' zaktualizowano<br>';
         }
         exit();
     }
@@ -48,7 +48,7 @@ class CurrencyController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $allUsers = $em->getRepository(User::class)->findAll();
-        foreach( $allUsers as $singleUsers) {
+        foreach( $allUsers as $singleUsers ) {
             $data = '
                 SELECT `cu`.`currency_name`,`uc`.`currency_min`, `cu`.`currency_bid`, `uc`.`currency_max`, `cu`.`currency_ask` FROM `user_currency` AS `uc` 
                 LEFT JOIN `currency` AS `cu` ON ( `uc`.`currency_id`=`cu`.`id`)
@@ -68,16 +68,16 @@ class CurrencyController extends AbstractController
                 }
             }
 
-            $info .= 'Jeżeli chcesz zakończyć śledzenie kliknij w link <a href="/destroyMailing/'.$singleUsers->getMailingActivate().'"> tutaj</a>';
-            echo 'Wysłam email do usera '.$singleUsers->getEmail().' z treścią:'.$info;
+            $info .= 'Jeżeli chcesz zakończyć śledzenie kliknij w link <a href="/destroyMailing/'. $singleUsers->getMailingActivate() .'"> tutaj</a>';
+            echo 'Wysłam email do usera '. $singleUsers->getEmail() .' z treścią:'.$info;
 
             $email = (new Email())
-            ->from('biuro@web-kod.pl')
-            ->to($singleUsers->getEmail())
+            ->from( 'biuro@web-kod.pl' )
+            ->to( $singleUsers->getEmail() )
             ->subject('Ceny walut uległy zmianie!')
-            ->text($info)
-            ->html('<p>'.$info.'</p>');
-            $mailer->send($email);
+            ->text ($info )
+            ->html( '<p>'.$info.'</p>' );
+            $mailer->send( $email );
             exit();
         }
     }

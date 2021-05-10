@@ -46,24 +46,24 @@ class RegistrationController extends AbstractController
             );
             // validate phone number
             $firstNumber = str_split($form->get('phone')->getData());
-            if($firstNumber[0] == 0 ){
+            if( $firstNumber[0] == 0 ){
                 $this->addFlash('error', 'Pierwszy znak to liczba 0, numer telefonu  nieprawdziwy');
-            }else{
+            } else {
                 //echo 'pierwszy znak nie jest zerem';
-                if( is_numeric($form->get('phone')->getData())){
+                if( is_numeric( $form->get('phone')->getData() ) ){
                     //echo 'walidacja poprawna, numer telefonu to 9 liczb i pierwsza nie jest zerem';
                     $user->setPhone($form->get('phone')->getData());
                     // sprawdzamy, czy user jest pełnoletni
                     
-                    $birthDateformat = date_format($form->get('birthday')->getData(), 'Y-m-d');
-                    $birthDateTimestamp = strtotime($birthDateformat);
-                    $userYears = round( ( time() - $birthDateTimestamp)/(365*24*3600) );
+                    $birthDateformat = date_format( $form->get('birthday')->getData(), 'Y-m-d' );
+                    $birthDateTimestamp = strtotime( $birthDateformat );
+                    $userYears = round( ( time() - $birthDateTimestamp )/(365*24*3600) );
                     
-                    if( $userYears >= 18){
+                    if( $userYears >= 18 ){
                         //echo 'user jest matur;), ma '.$userYears.' lata';
                         // zapisujemy do bazy birthday jako timpestamp
                         $user->setBirthday($birthDateTimestamp);
-                        $user->setMailingActivate(md5(time()));
+                        $user->setMailingActivate( md5(time()) );
                         $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($user);
                         $entityManager->flush();
@@ -72,14 +72,14 @@ class RegistrationController extends AbstractController
                         $currencyData = $currency->findAll();
                         $currencyInfo = '';
                         foreach( $currencyData as $sCur ){
-                            if (true === $form->get($sCur->getCurrencyCode())->getData()) {
+                            if ( true === $form->get( $sCur->getCurrencyCode() )->getData() ) {
                                 $userCurrency =  new UserCurrency();
-                                $userCurrency->setCurrencyId($sCur->getId());
+                                $userCurrency->setCurrencyId( $sCur->getId() );
                                 $userCurrency->setCurrencyMin( $form->get('min'.$sCur->getCurrencyCode())->getData() );
                                 $userCurrency->setCurrencyMax( $form->get('max'.$sCur->getCurrencyCode())->getData() );
                                 $userCurrency->setUserId( $user->getId() );
                                 $entityManager = $this->getDoctrine()->getManager();
-                                $entityManager->persist($userCurrency);
+                                $entityManager->persist( $userCurrency );
                                 $entityManager->flush();
                                 $currencyInfo .= 'Zaznaczono walutę '. $sCur->getCurrencyName() .' do śledzenia.<br>';
                             }

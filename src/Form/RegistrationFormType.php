@@ -36,14 +36,14 @@ class RegistrationFormType extends AbstractType
         foreach($currencyData as $value ){
             $builder
             ->add($value->getCurrencyCode(),CheckboxType::class, [
-                'label' => $value->getCurrencyName().' ( kurs: '. ( ($value->getCurrencyBid()+$value->getCurrencyAsk())/2).')',
+                'label' => $value->getCurrencyName() .' ( kurs: '. ( ($value->getCurrencyBid()+$value->getCurrencyAsk())/2) .')',
                 'mapped' => false,
                 'required' => false,
                 'attr'     => [
                     'class'=> 'currencyData'
                 ] 
             ])
-            ->add('min'.$value->getCurrencyCode(),NumberType::class, [
+            ->add('min'. $value->getCurrencyCode(),NumberType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => false,
@@ -52,7 +52,7 @@ class RegistrationFormType extends AbstractType
                     'value' => $value->getCurrencyBid(),
                 ]
             ])
-            ->add('max'.$value->getCurrencyCode(),NumberType::class, [
+            ->add('max'. $value->getCurrencyCode(),NumberType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => false,
@@ -118,7 +118,6 @@ class RegistrationFormType extends AbstractType
             ->add('birthday',  DateType::class, [
                 'label' => 'Data urodzin',
                 'widget' => 'single_text',
-                // this is actually the default format for single_text
                 'format' => 'yyyy-MM-dd',
             ])
             ->add('agreeTerms', CheckboxType::class, [

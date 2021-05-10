@@ -15,9 +15,6 @@ class IndexController extends AbstractController
     {
         $nbp = file_get_contents('http://api.nbp.pl/api/exchangerates/tables/c/?format=json');
         $data = json_decode($nbp, TRUE);
-        //$exchangeRate = $data["rates"][0]["bid"];
-        //$infoToday = 'kurs waluty '.$data['currency'] .' z dnia '.$data["rates"][0]["effectiveDate"].' to '.$exchangeRate;
-        
         return $this->render('index/index.html.twig', [
             'infoToday' => $data
         ]);
